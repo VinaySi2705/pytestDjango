@@ -4,6 +4,8 @@
 from django.contrib.auth.models import User
 import pytest
 
+from selenium import webdriver
+
 from pytest_factoryboy import register
 from tests.factories import UserFactory, CategoryFactory, ProductFactory
 register(UserFactory)
@@ -13,12 +15,12 @@ register(ProductFactory)
 #now our fixture will be named as user_factory
 # factory related test is in test_ex5.py
 
-
+"""
 @pytest.fixture
 def new_user1(db, user_factory):
     user = user_factory.create()
     return user
-
+"""
 
 """
 @pytest.fixture()
@@ -60,4 +62,33 @@ def new_user1(db,new_user_factory):
 @pytest.fixture
 def new_user2(db,new_user_factory):
     return new_user_factory("Test_user","password","MyName", is_staff=True)
+"""
+
+"""
+@pytest.fixture(scope="class")
+def chrome_driver_init(request):
+
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    chrome_driver = webdriver.Chrome(executable_path=r"./chromedriver", options=options)
+    request.cls.driver = chrome_driver
+    yield
+    chrome_driver.close()
+"""
+
+"""
+from selenium.webdriver.edge.options import Options
+
+options = Options()
+options.binary_location = r"./msedgedriver"
+
+@pytest.fixture(params=["chrome", "edge"], scope="class")
+def driver_init(request):
+    if request.param == "chrome":
+        web_driver = webdriver.Chrome(executable_path=r"./chromedriver")
+    if request.param == "edge":
+        web_driver = webdriver.Edge(options = options)
+    request.cls.driver = web_driver
+    yield
+    web_driver.close()
 """
