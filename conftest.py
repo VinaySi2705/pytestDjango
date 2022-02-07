@@ -1,11 +1,26 @@
 # This is the file where we place all fixture functions
 # It will be captured automatically before each test to which it assigned
 
-
+from django.contrib.auth.models import User
 import pytest
 
-from django.contrib.auth.models import User
+from pytest_factoryboy import register
+from tests.factories import UserFactory, CategoryFactory, ProductFactory
+register(UserFactory)
+register(CategoryFactory)
+register(ProductFactory)
 
+#now our fixture will be named as user_factory
+# factory related test is in test_ex5.py
+
+
+@pytest.fixture
+def new_user1(db, user_factory):
+    user = user_factory.create()
+    return user
+
+
+"""
 @pytest.fixture()
 def user_1(db):
     user = User.objects.create_user("test-user")
@@ -45,3 +60,4 @@ def new_user1(db,new_user_factory):
 @pytest.fixture
 def new_user2(db,new_user_factory):
     return new_user_factory("Test_user","password","MyName", is_staff=True)
+"""
